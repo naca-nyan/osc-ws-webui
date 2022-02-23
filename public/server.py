@@ -18,9 +18,16 @@ class PostHandler(SimpleHTTPRequestHandler):
         print(post_body)
         data = json.loads(post_body)
         self.send_response(200)
-        if "path" in data and "value" in data:
+        if "path" in data and "value" in data and "type" in data:
             path = data["path"]
+            t = data["type"]
             value = data["value"]
+            if t == 'Int':
+                value = int(value)
+            elif t == 'Bool':
+                value = bool(int(value))
+            elif t == 'Float':
+                value = float(value)
             client.send_message(path, value)
 
 
