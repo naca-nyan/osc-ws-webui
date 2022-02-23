@@ -23,6 +23,7 @@ function connect() {
   sock.addEventListener("message", async (message) => {
     const data = await JSON.parse(message.data);
     const { path, value } = data;
+    console.log(data);
     fetch("http://localhost:9090/", {
       method: "POST",
       headers: {
@@ -39,8 +40,8 @@ function connect() {
 function send() {
   _sock.send(
     JSON.stringify({
-      path: parameter,
-      value: value,
+      path: parameter.value,
+      value: value.value,
     })
   );
 }
