@@ -12,6 +12,9 @@ client = udp_client.SimpleUDPClient(vrcClientIp, vrcClientPort)
 
 
 class PostHandler(SimpleHTTPRequestHandler):
+    extension_map = SimpleHTTPRequestHandler.extensions_map
+    extension_map.update({'.js': 'text/javascript'})
+
     def do_POST(self):
         content_len = int(self.headers['content-length'])
         post_body = self.rfile.read(content_len).decode('utf8')
@@ -30,8 +33,6 @@ class PostHandler(SimpleHTTPRequestHandler):
                 value = float(value)
             client.send_message(path, value)
 
-
-PostHandler.extensions_map['.js'] = 'text/javascript'
 
 if __name__ == '__main__':
     print(f"Staring the server at http://{ip}:{port}")
