@@ -12,7 +12,6 @@ const emit = defineEmits<{
 const user = ref("");
 const room = ref("");
 
-const serverAddr = ref("");
 const serverAddrDefault = "wss://osc-ws.herokuapp.com";
 
 let sock: null | WebSocket = null;
@@ -22,7 +21,7 @@ function connect() {
   try {
     if (!user.value) throw new Error("おなまえがないよ～");
     if (!room.value) throw new Error("あいことばがないよ～");
-    const url = new URL(serverAddr.value || serverAddrDefault);
+    const url = new URL(serverAddrDefault);
     const params = new URLSearchParams({ user: user.value, room: room.value });
     url.search = params.toString();
     sock = new WebSocket(url);
@@ -82,36 +81,19 @@ defineExpose({
 <template>
   <div class="row">
     <div class="col-sm-8 m-auto mt-2">
-      <div class="row">
-        <div class="col-6 pe-1">
-          <input
-            v-model="user"
-            class="form-control"
-            :disabled="state !== 'CLOSED'"
-            placeholder="おなまえ"
-          />
-        </div>
-        <div class="col-6 ps-1">
-          <input
-            v-model="room"
-            class="form-control"
-            :disabled="state !== 'CLOSED'"
-            placeholder="あいことば"
-          />
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row">
-    <div class="col-sm-8 m-auto mt-2">
       <label class="visually-hidden">Server Address</label>
       <div class="input-group">
         <input
-          v-model="serverAddr"
+          v-model="user"
           class="form-control"
-          @keydown="onkeydown"
           :disabled="state !== 'CLOSED'"
-          :placeholder="serverAddrDefault"
+          placeholder="おなまえ"
+        />
+        <input
+          v-model="room"
+          class="form-control"
+          :disabled="state !== 'CLOSED'"
+          placeholder="あいことば"
         />
         <button
           v-if="state === 'CLOSED'"
